@@ -8,11 +8,11 @@ var ctx = canvas.getContext("2d");
 var player = {
     x: width/2,
     y: height/2,
-    destinationX: this.x,
-    destinationY: this.y,
+    destinationX: width/2,
+    destinationY: height/2,
     direction: 0,
     moving: false,
-    speed: 1/5,
+    velocity: 500/5,
     ccd: false,
     getX: function() {
         return this.x;
@@ -49,6 +49,12 @@ var player = {
     },
     setDirection: function(newDirection){
         this.direction = newDirection;
+    },
+    getVelocity: function(){
+        return this.velocity;
+    },
+    setVelocity: function(newVelocity){
+        this.velocity = newVelocity;
     },
     getCcd: function(){
         return this.ccd;
@@ -93,7 +99,19 @@ while(true){
 
 function mechanics(){
     if(player.getMoving() == true){
-        //
+        //If velocity is 20%, we move across 20% of the screen in 1 second.
+        //.2/60 = the amount we move in one frame. This is r
+        var r = player.getVelocity()/60;
+        var dx = r*Math.cos(player.getDirection());
+        var dy = r*Math.sin(player.getDirection());
+        //Movement!
+        player.setX(player.getX() + dx);
+        player.setY(player.getY() + dy);
+        //If we've reached the destination stop moving!
+        if(player.getX() >= player.getDestinationX() && player.getY() >= player.getDestinationY()){
+            console.log("stopped moving");
+            player.setMoving(false);
+        }
     }
     if(player.getCcd() == false){
         if(player.getDestinationX() != player.getX() || player.getDestinationY() != player.getY()){
@@ -140,7 +158,7 @@ function mechanics(){
             }
             player.setDirection(tempRad);
             console.log(tempRad);
-            //player.setMoving(true);
+            player.setMoving(true);
         }else{
             player.setMoving(false);
         }
@@ -165,7 +183,14 @@ function graphics(){
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
     ctx.beginPath();
     ctx.arc(player.getX(), player.getY(), 50, degToRad(0), degToRad(360), false);
-    console.log(player.getX(), "123", player.getY());
+    console.log("Current location is:", player.getX(), player.getY());
+    ctx.fill();
+    //Draw Destination
+    ctx.fillStyle = 'blue';
+    //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
+    ctx.beginPath();
+    ctx.arc(player.getDestinationX(), player.getDestinationY(), 10, degToRad(0), degToRad(360), false);
+    console.log("Destination is:", player.getDestinationX(), player.getDestinationY());
     ctx.fill();
 }
 
