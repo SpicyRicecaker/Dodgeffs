@@ -81,22 +81,10 @@ ctx.strokeRect(25,25,175,200);
     So long as the player location does not equal the location to move to, moving is true
     Keyboard s means to stop movement.
 */
-var elapsedtime = 0;
-var loop;
-while(true){
-    //
-    loop = window.setInterval(game, 1000/60);
-    function game(){
-        elapsedtime++;
-        //debug for now
-        if(elapsedtime >= 10000){
-            window.clearInterval(loop);
-        }
-        //debug
-        mechanics();
-        graphics();
-    }
-    break;
+function game(){
+    mechanics();
+    graphics();
+    requestAnimationFrame(game);
 }
 
 function mechanics(){
@@ -111,10 +99,6 @@ function mechanics(){
         var exactDx = player.getDestinationX() - player.getX();
         var exactDy = player.getDestinationY() - player.getY();
         //That is, the distance to the destination is less than dx
-        console.log("dx is", dx)
-        console.log("exactDx is", exactDx)
-        console.log("dy is", dy);
-        console.log("exactDy is", exactDy)
         if(Math.abs(exactDx) <= Math.abs(dx) && Math.abs(exactDy) <= Math.abs(dy)){
             //Set it so
             player.setX(player.getX() + exactDx);
@@ -174,7 +158,7 @@ function graphics(){
     //Display total fps elapsed
     ctx.fillStyle = 'red';
     ctx.font = '48px arial';
-    ctx.fillText(elapsedtime, 10,50);
+    //ctx.fillText(newTime, 10,50);
     //Draw player
     ctx.fillStyle = 'yellow';
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
@@ -214,3 +198,5 @@ function onKeyDown(e){
         player.setDestinationY(player.getY());
     }
 }
+
+requestAnimationFrame(game);
