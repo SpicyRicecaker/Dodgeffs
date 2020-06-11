@@ -1,6 +1,7 @@
 var canvas = document.querySelector(".gameCanvas");
 canvas.addEventListener("mousedown", onMouseClick);
 canvas.addEventListener("contextmenu", function (noContext){noContext.preventDefault();});
+window.addEventListener("keydown", onKeyDown);
 var width = canvas.width = window.innerWidth;
 var height = canvas.height = window.innerHeight;
 var ctx = canvas.getContext("2d");
@@ -109,7 +110,12 @@ function mechanics(){
         player.setY(player.getY() + dy);
         //If we've reached the destination stop moving!
         if(player.getX() >= player.getDestinationX() && player.getY() >= player.getDestinationY()){
-            console.log("stopped moving");
+            //console.log("stopped moving");
+            //console.log("stopped moving");
+            //console.log("stopped moving");
+            //console.log("stopped moving");
+            //console.log("stopped moving");
+            //console.log("stopped moving");
             player.setMoving(false);
         }
     }
@@ -157,7 +163,7 @@ function mechanics(){
                 }
             }
             player.setDirection(tempRad);
-            console.log(tempRad);
+            //console.log(tempRad);
             player.setMoving(true);
         }else{
             player.setMoving(false);
@@ -183,14 +189,14 @@ function graphics(){
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
     ctx.beginPath();
     ctx.arc(player.getX(), player.getY(), 50, degToRad(0), degToRad(360), false);
-    console.log("Current location is:", player.getX(), player.getY());
+    //console.log("Current location is:", player.getX(), player.getY());
     ctx.fill();
     //Draw Destination
     ctx.fillStyle = 'blue';
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
     ctx.beginPath();
     ctx.arc(player.getDestinationX(), player.getDestinationY(), 10, degToRad(0), degToRad(360), false);
-    console.log("Destination is:", player.getDestinationX(), player.getDestinationY());
+    //console.log("Destination is:", player.getDestinationX(), player.getDestinationY());
     ctx.fill();
 }
 
@@ -207,6 +213,18 @@ function onMouseClick(e){
     player.setDestinationY(e.clientY);
     player.setMoving(false);
 }
+
+function onKeyDown(e){
+    const keyName = e.key;
+
+    //Stops movement!
+    if(keyName == "s"){
+        player.setDestinationX(player.getX());
+        player.setDestinationY(player.getY());
+    }
+}
+
+
 
 
 
