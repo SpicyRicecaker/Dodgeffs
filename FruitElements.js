@@ -13,7 +13,7 @@ var player = {
     destinationY: height/2,
     direction: 0,
     moving: false,
-    velocity: 500/5,
+    velocity: 340,
     ccd: false,
     getX: function() {
         return this.x;
@@ -117,9 +117,7 @@ function mechanics(){
         console.log("exactDy is", exactDy)
         if(Math.abs(exactDx) <= Math.abs(dx) && Math.abs(exactDy) <= Math.abs(dy)){
             //Set it so
-            console.log("Activating stop!")
             player.setX(player.getX() + exactDx);
-            //player.setDestinationX()
             player.setY(player.getY() + exactDy);
             player.setMoving(false);
         }else{
@@ -129,48 +127,31 @@ function mechanics(){
         }
         //return
     }
-    if(player.getCcd() == false){
+    if(player.getMoving() == false){
         if(player.getDestinationX() != player.getX() || player.getDestinationY() != player.getY()){
             //Update player direction
             var dx = player.getDestinationX()-player.getX();
             var dy = player.getDestinationY()-player.getY();
             var tempRad = 0;
+            //Calculate angle
+            tempRad = Math.atan(dy/dx);
             if(dx == 0){
                 //If origin 
                 if(dy == 0){
                     //leave
-                    return; }
-                //+y
-                else if(dy > 0){
-                    player.setDirection(degToRad(90));
+                    return; 
                 }
-                //-y
-                else{
-                    player.setDirection(degToRad(270));
-                }
-            }
-            //Calculate angle
-            tempRad = Math.atan(dy/dx);
-            if(dx > 0){
+            }else if(dx > 0){
                 //First quadrant
-                if(dy >= 0 ){
-                    //Do nothing
-                }
+                //Do nothing
+
                 //dy < 0, fourth quadrant
-                else{
                     tempRad = 2*Math.PI+tempRad;
-                }
             }
             //dx < 0
             else {
-                //second quadrant
-                if(dy >= 0){
-                    tempRad = Math.PI + tempRad; // good
-                }
-                //dy < 0, third quadrant
-                else{
+                //second & third quadrant
                     tempRad = Math.PI + tempRad; //good
-                }
             }
             player.setDirection(tempRad);
             //console.log(tempRad);
