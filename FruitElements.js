@@ -84,6 +84,7 @@ ctx.strokeRect(25,25,175,200);
 var elapsedtime = 0;
 var loop;
 while(true){
+    //
     loop = window.setInterval(game, 1000/60);
     function game(){
         elapsedtime++;
@@ -105,19 +106,28 @@ function mechanics(){
         var r = player.getVelocity()/60;
         var dx = r*Math.cos(player.getDirection());
         var dy = r*Math.sin(player.getDirection());
-        //Movement!
-        player.setX(player.getX() + dx);
-        player.setY(player.getY() + dy);
-        //If we've reached the destination stop moving!
-        if(player.getX() >= player.getDestinationX() && player.getY() >= player.getDestinationY()){
-            //console.log("stopped moving");
-            //console.log("stopped moving");
-            //console.log("stopped moving");
-            //console.log("stopped moving");
-            //console.log("stopped moving");
-            //console.log("stopped moving");
+
+        //If we're about to go over
+        var exactDx = player.getDestinationX() - player.getX();
+        var exactDy = player.getDestinationY() - player.getY();
+        //That is, the distance to the destination is less than dx
+        console.log("dx is", dx)
+        console.log("exactDx is", exactDx)
+        console.log("dy is", dy);
+        console.log("exactDy is", exactDy)
+        if(Math.abs(exactDx) <= Math.abs(dx) && Math.abs(exactDy) <= Math.abs(dy)){
+            //Set it so
+            console.log("Activating stop!")
+            player.setX(player.getX() + exactDx);
+            //player.setDestinationX()
+            player.setY(player.getY() + exactDy);
             player.setMoving(false);
+        }else{
+            //Movement!
+            player.setX(player.getX() + dx);
+            player.setY(player.getY() + dy);
         }
+        //return
     }
     if(player.getCcd() == false){
         if(player.getDestinationX() != player.getX() || player.getDestinationY() != player.getY()){
@@ -223,9 +233,3 @@ function onKeyDown(e){
         player.setDestinationY(player.getY());
     }
 }
-
-
-
-
-
-
