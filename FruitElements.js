@@ -81,7 +81,17 @@ ctx.strokeRect(25,25,175,200);
     So long as the player location does not equal the location to move to, moving is true
     Keyboard s means to stop movement.
 */
-function game(){
+var currentFps = 0;
+var oldTimeStamp = new Date().getTime();
+var secondsPassed;
+
+function game(timeStamp){
+    //timeStamp - oldTimeStamp should be around 1000/60, resulting in 1/60 in seconds passed
+    secondsPassed = (timeStamp - oldTimeStamp) / 1000;
+    //Update past time
+    oldTimeStamp = timeStamp;
+    //1/(1/60) would just be 60
+    currentFps = Math.round(1/secondsPassed);
     mechanics();
     graphics();
     requestAnimationFrame(game);
@@ -90,10 +100,12 @@ function game(){
 function mechanics(){
     if(player.getMoving() == true){
         //If velocity is 20%, we move across 20% of the screen in 1 second.
-        //.2/60 = the amount we move in one frame. This is r
+        //.2/60 = the amount we move in one frame.
         var r = player.getVelocity()/60;
-        var dx = r*Math.cos(player.getDirection());
-        var dy = r*Math.sin(player.getDirection());
+        var dx = r*(Math.cos(player.getDirection())).toFixed(15);
+        console.log("WE ARE ABOUT TO MOVE X BY:", dx);
+        var dy = r*(Math.sin(player.getDirection())).toFixed(15);
+        console.log("WE ARE ABOUT TO MOVE Y BY:", dy);
 
         //If we're about to go over
         var exactDx = player.getDestinationX() - player.getX();
@@ -126,18 +138,20 @@ function mechanics(){
                     return; 
                 }
             }else if(dx > 0){
-                //First quadrant
-                //Do nothing
-
+                //First quadrant, do nothing
                 //dy < 0, fourth quadrant
+                if(dy<0){
+
                     tempRad = 2*Math.PI+tempRad;
+                }
             }
             //dx < 0
             else {
                 //second & third quadrant
-                    tempRad = Math.PI + tempRad; //good
+                tempRad = Math.PI + tempRad; //good
             }
             player.setDirection(tempRad);
+            console.log(player.getDirection());
             //console.log(tempRad);
             player.setMoving(true);
         }else{
@@ -158,7 +172,7 @@ function graphics(){
     //Display total fps elapsed
     ctx.fillStyle = 'red';
     ctx.font = '48px arial';
-    //ctx.fillText(newTime, 10,50);
+    ctx.fillText(currentFps, 10,50);
     //Draw player
     ctx.fillStyle = 'yellow';
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
