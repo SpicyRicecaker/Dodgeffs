@@ -103,9 +103,7 @@ function mechanics(){
         //.2/60 = the amount we move in one frame.
         var r = player.getVelocity()/60;
         var dx = r*(Math.cos(player.getDirection())).toFixed(15);
-        console.log("WE ARE ABOUT TO MOVE X BY:", dx);
         var dy = r*(Math.sin(player.getDirection())).toFixed(15);
-        console.log("WE ARE ABOUT TO MOVE Y BY:", dy);
 
         //If we're about to go over
         var exactDx = player.getDestinationX() - player.getX();
@@ -151,7 +149,6 @@ function mechanics(){
                 tempRad = Math.PI + tempRad; //good
             }
             player.setDirection(tempRad);
-            console.log(player.getDirection());
             //console.log(tempRad);
             player.setMoving(true);
         }else{
@@ -167,21 +164,21 @@ function graphics(){
     //Reset canvas
     ctx.clearRect(0,0,canvas.width,canvas.height);
     //Draw background
-    ctx.fillStyle = 'rgb(0, 0, 0)';
+    ctx.fillStyle = '#434343';
     ctx.fillRect(0,0, width, height);
     //Display total fps elapsed
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = '#f3f3f3';
     ctx.font = '48px arial';
     ctx.fillText(currentFps, 10,50);
     //Draw player
-    ctx.fillStyle = 'yellow';
+    ctx.fillStyle = '#ffd966';
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
     ctx.beginPath();
     ctx.arc(player.getX(), player.getY(), 50, degToRad(0), degToRad(360), false);
     //console.log("Current location is:", player.getX(), player.getY());
     ctx.fill();
     //Draw Destination
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = '#a4c2f4';
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
     ctx.beginPath();
     ctx.arc(player.getDestinationX(), player.getDestinationY(), 10, degToRad(0), degToRad(360), false);
