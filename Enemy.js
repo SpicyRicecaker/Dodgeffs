@@ -124,10 +124,11 @@ class Enemy extends Entity {
   }
   render() {
     //Draw player
+    ctx.beginPath();
     ctx.fillStyle = "#e06666";
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
-    ctx.beginPath();
     ctx.arc(this.getX(), this.getY(), 25, degToRad(0), degToRad(360), false);
     ctx.fill();
+    ctx.closePath();
   }
 }

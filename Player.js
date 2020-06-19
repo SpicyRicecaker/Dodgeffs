@@ -10,7 +10,8 @@ class Player extends Entity {
     this.direction = 0;
     this.moving = false;
     this.velocity = 340;
-    this.HP = 500;
+    this.maxHP = 500;
+    this.currentHP = 500;
     this.ccd = false;
   }
   getX() {
@@ -49,11 +50,17 @@ class Player extends Entity {
   setDirection(newDirection) {
     this.direction = newDirection;
   }
-  getHP() {
-    return this.HP;
+  getMaxHP() {
+    return this.maxHP;
   }
-  setHp(newHP) {
-    this.HP = newHP;
+  setHp(newMaxHP) {
+    this.maxHP = newMaxHP;
+  }
+  getCurrentHP() {
+    return this.currentHP;
+  }
+  setCurrentHP(newCurrentHP) {
+    this.currentHP = newCurrentHP;
   }
   updateDirection() {
     var dx = this.getDestinationX() - this.getX();
@@ -90,6 +97,9 @@ class Player extends Entity {
   getCcd() {
     return this.ccd;
   }
+  rgb(r, g, b){
+    return "rgb("+r+","+g+","+b+")";
+  }
   move() {
     //If velocity is 20%, we move across 20% of the screen in 1 second.
     //.2/60 = the amount we move in one frame.
@@ -118,28 +128,28 @@ class Player extends Entity {
   }
   tick() {
     console.log(player.getY());
-    if(this.getMoving() == false){
+    if (this.getMoving() == false) {
       this.updateDirection();
       this.setMoving(true);
     }
-    if(this.getMoving() == true){
-
+    if (this.getMoving() == true) {
       //move this
       this.move();
     }
   }
   render() {
     //Draw player
+    ctx.beginPath();
     ctx.fillStyle = "#ffd966";
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
-    ctx.beginPath();
     ctx.arc(this.getX(), this.getY(), 50, degToRad(0), degToRad(360), false);
     ctx.fill();
+    ctx.closePath();
 
     //Draw Destination
+    ctx.beginPath();
     ctx.fillStyle = "#a4c2f4";
     //Locationx, locationy, radius, start and end angles, clockwise or anticlockwise
-    ctx.beginPath();
     ctx.arc(
       this.getDestinationX(),
       this.getDestinationY(),
@@ -149,5 +159,29 @@ class Player extends Entity {
       false
     );
     ctx.fill();
+    ctx.closePath();
+
+    //Draw max health (constant)
+    ctx.beginPath();
+    ctx.fillStyle = "#666666";
+    ctx.rect((width / 2) - 100, height - 50, 200, 30);
+    ctx.fill();
+    //Health border
+    //ctx.strokeStyle = "#f3f3f3";
+    //ctx.lineWidth = 5;
+    //ctx.stroke();
+    ctx.closePath();
+
+    //Draw current health (variable)
+    ctx.beginPath();
+    //As variable!
+    ctx.rect((width / 2) - 100, height - 50, (this.getCurrentHP()/this.getMaxHP())*200, 30);
+    ctx.fill();
+
+    //Gotta do something for full hp
+    if(this.getCurrentHP() == this.getMaxHP()){
+      ctx.beginPath();
+      ctx.fillStyle = "#93c47d"
+    }
   }
 }

@@ -80,16 +80,22 @@ function render() {
   //Reset canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   //Draw background
+  ctx.beginPath();
   ctx.fillStyle = "#434343";
   ctx.fillRect(0, 0, width, height);
+  ctx.closePath();
   //Display total fps elapsed
+  ctx.beginPath();
   ctx.fillStyle = "#f3f3f3";
   ctx.font = "48px arial";
   ctx.fillText(currentFps, 10, 50);
+  ctx.closePath();
   //Display total game time, in minutes
+  ctx.beginPath();
   ctx.fillStyle = "#f3f3f3";
   ctx.font = "48px arial";
   ctx.fillText((padNumber(Math.floor(totalGameTime/60)) + ":" + padNumber(Math.floor((totalGameTime%60)))), width/2-60, 50);
+  ctx.closePath();
   //Render entities
   for(var i = 0; i < entityList.length; ++i){
     entityList[i].render();
