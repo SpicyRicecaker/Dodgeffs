@@ -117,6 +117,7 @@ class Player extends Entity {
     //return
   }
   tick() {
+    console.log(player.getY());
     if(this.getMoving() == false){
       this.updateDirection();
       this.setMoving(true);
