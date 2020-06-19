@@ -117,20 +117,14 @@ class Player extends Entity {
     //return
   }
   tick() {
-    if (this.getMoving() == true) {
+    if(this.getMoving() == false){
+      this.updateDirection();
+      this.setMoving(true);
+    }
+    if(this.getMoving() == true){
+
       //move this
       this.move();
-    }
-    if (this.getMoving() == false) {
-      if (
-        this.getDestinationX() != this.getX() ||
-        this.getDestinationY() != this.getY()
-      ) {
-        //Update this direction
-        this.updateDirection();
-        //console.log(tempRad);
-        this.setMoving(true);
-      }
     }
   }
   render() {
