@@ -3,10 +3,12 @@ class Enemy extends Entity {
     //We spawn enemies at the top OR bottom of the screen with a random direction.
     super(newId);
     this.name;
-    this.x = width/2;
-    this.y = height/2;
+    this.direction = this.getRandomDirection();
     this.radius = 25;
-    this.direction = 5*Math.PI/4;
+    this.spawnDistance = this.updateSpawnDistance();
+    this.x = this.spawnX();
+    this.y = this.spawnY();
+    this.bounds = false;
     this.moving = true;
     this.velocity = 340;
     this.ccd = false;
@@ -23,6 +25,18 @@ class Enemy extends Entity {
   setY(newY) {
     this.y = newY;
   }
+  getBounds() {
+    return this.bounds;
+  }
+  setBounds(newBounds) {
+    this.bounds = newBounds;
+  }
+  getSpawnDistance() {
+    return this.spawnDistance;
+  }
+  setSpawnDistance(newSpawnDistance) {
+    this.spawnDistance = newSpawnDistance;
+  }
   getMoving() {
     return this.moving;
   }
@@ -32,8 +46,36 @@ class Enemy extends Entity {
   getDirection() {
     return this.direction;
   }
-  //Get's
-  getRandomDirection() {}
+  getRandomDirection() {
+    return Math.random() * Math.PI * 2;
+  }
+  updateSpawnDistance() {
+    return (
+      Math.sqrt(Math.pow(width / 2, 2) + Math.pow(height / 2, 2)) +
+      this.getRadius()
+    );
+  }
+  getOpposingAngle(angle) {
+    if (angle < Math.PI) {
+      return Math.PI + angle;
+    } else {
+      return angle - Math.PI;
+    }
+  }
+  spawnX() {
+    return (
+      width / 2 +
+      this.getSpawnDistance() *
+        Math.cos(this.getOpposingAngle(this.getDirection()))
+    );
+  }
+  spawnY() {
+    return (
+      height / 2 +
+      this.getSpawnDistance() *
+        Math.sin(this.getOpposingAngle(this.getDirection()))
+    );
+  }
   getReflectedY(angle) {
     //reflect over y-axis
     //If angle is above x axis
@@ -61,13 +103,18 @@ class Enemy extends Entity {
   getCcd() {
     return this.ccd;
   }
-  getRadius(){
+  getRadius() {
     return this.radius;
   }
-  setRadius(newRadius){
+  setRadius(newRadius) {
     this.radius = newRadius;
   }
   move() {
+    /*
+    console.log(this.getX(), ",", this.getY());
+    console.log(this.getDirection(), ",", this.getOpposingAngle(this.getDirection()));
+    console.log(this.getSpawnDistance());
+    */
     //If velocity is 20%, we move across 20% of the screen in 1 second.
     //.2/60 = the amount we move in one frame.
     var r = this.getVelocity() / 60;
@@ -75,6 +122,19 @@ class Enemy extends Entity {
     var dy = r * Math.sin(this.getDirection()).toFixed(15);
     var collisionX = false;
     var collisionY = false;
+    if (!this.getBounds()) {
+      this.setX(this.getX() + dx);
+      this.setY(this.getY() + dy);
+      if (
+        this.getX() - this.getRadius() > 0 &&
+        this.getX() + this.getRadius() < width &&
+        this.getY() - this.getRadius() > 0 &&
+        this.getY() + this.getRadius() < height
+      ) {
+        this.setBounds(true);
+      }
+      return;
+    }
 
     //If we are colliding against the left or right side
     if (this.getX() - this.getRadius() + dx < 0) {
@@ -108,7 +168,6 @@ class Enemy extends Entity {
       this.setDirection(this.getReflectedX(this.getDirection()));
       collisionY = true;
     }
-
     if (!collisionX) {
       this.setX(this.getX() + dx);
     }

@@ -51,6 +51,7 @@ var totalGameTime = 0;
 var currentFps = 0;
 var oldTimeStamp = 0;
 var secondsPassed;
+var secondsToSpawn = 0;
 
 function game(timeStamp) {
   //timeStamp - oldTimeStamp should be around 1000/60, resulting in 1/60 in seconds passed
@@ -60,7 +61,8 @@ function game(timeStamp) {
   //1/(1/60) would just be 60
   currentFps = Math.round(1 / secondsPassed);
   //Update game time
-  totalGameTime = totalGameTime + secondsPassed;
+  totalGameTime += secondsPassed;
+  secondsToSpawn += secondsPassed;
   //Actual game 
   tick();
   render();
@@ -71,6 +73,10 @@ function game(timeStamp) {
 function tick() {
   for(var i = 0; i < entityList.length; ++i){
     entityList[i].tick();
+  }
+  if(secondsToSpawn > 10){
+    entityList.push(new Enemy(enemyId));
+    secondsToSpawn = 0;
   }
 }
 

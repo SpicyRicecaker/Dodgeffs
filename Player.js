@@ -97,9 +97,6 @@ class Player extends Entity {
   getCcd() {
     return this.ccd;
   }
-  rgb(r, g, b){
-    return "rgb("+r+","+g+","+b+")";
-  }
   move() {
     //If velocity is 20%, we move across 20% of the screen in 1 second.
     //.2/60 = the amount we move in one frame.
@@ -127,7 +124,6 @@ class Player extends Entity {
     //return
   }
   tick() {
-    console.log(player.getY());
     if (this.getMoving() == false) {
       this.updateDirection();
       this.setMoving(true);
@@ -193,7 +189,6 @@ class Player extends Entity {
     ctx.globalAlpha = 1;
     ctx.closePath();
     
-
     //Gotta do something for full hp WIP
     if(this.getCurrentHP() == this.getMaxHP()){
       ctx.beginPath();
