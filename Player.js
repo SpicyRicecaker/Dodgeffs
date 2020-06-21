@@ -11,7 +11,7 @@ class Player extends Entity {
     this.moving = false;
     this.velocity = 340;
     this.maxHP = 500;
-    this.currentHP = 500;
+    this.currentHP = 400;
     this.ccd = false;
   }
   getX() {
@@ -162,6 +162,7 @@ class Player extends Entity {
     ctx.closePath();
 
     //Draw max health (constant)
+    
     ctx.beginPath();
     ctx.fillStyle = "#666666";
     ctx.rect((width / 2) - 100, height - 50, 200, 30);
@@ -171,14 +172,29 @@ class Player extends Entity {
     //ctx.lineWidth = 5;
     //ctx.stroke();
     ctx.closePath();
+    
 
     //Draw current health (variable)
     ctx.beginPath();
     //As variable!
+    //First draw the color of the hp when it is low
+    ctx.fillStyle = "#e06666";
     ctx.rect((width / 2) - 100, height - 50, (this.getCurrentHP()/this.getMaxHP())*200, 30);
     ctx.fill();
+    ctx.closePath();
 
-    //Gotta do something for full hp
+   
+    ctx.beginPath();
+    //Then blend it with an hp color of increasing opacity??
+    ctx.fillStyle = "#93c47d";
+    ctx.globalAlpha = (this.getCurrentHP()/this.getMaxHP());
+    ctx.rect((width / 2) - 100, height - 50, (this.getCurrentHP()/this.getMaxHP())*200, 30);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.closePath();
+    
+
+    //Gotta do something for full hp WIP
     if(this.getCurrentHP() == this.getMaxHP()){
       ctx.beginPath();
       ctx.fillStyle = "#93c47d"
