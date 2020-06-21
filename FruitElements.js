@@ -52,6 +52,7 @@ var currentFps = 0;
 var oldTimeStamp = 0;
 var secondsPassed;
 var secondsToSpawn = 0;
+var running = true;
 
 function game(timeStamp) {
   //timeStamp - oldTimeStamp should be around 1000/60, resulting in 1/60 in seconds passed
@@ -67,7 +68,23 @@ function game(timeStamp) {
   tick();
   render();
   //Recursively call the next frame
-  requestAnimationFrame(game);
+  if(running){
+    requestAnimationFrame(game);
+  }
+}
+
+function gameOver(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //Draw background
+    ctx.beginPath();
+    ctx.fillStyle = "#434343";
+    ctx.fillRect(0, 0, width, height);
+    ctx.closePath();
+    ctx.beginPath();
+    ctx.fillStyle = "#f3f3f3";
+    ctx.font = "200px arial";
+    ctx.fillText("GAME OVER :D", width/2-700, height/2);
+    ctx.closePath();
 }
 
 function tick() {
@@ -81,6 +98,10 @@ function tick() {
 }
 
 function render() {
+  if(!running){
+    gameOver();
+    return;
+  }
   //Account for window resizing if needed
   resizeCanvas();
   //Reset canvas

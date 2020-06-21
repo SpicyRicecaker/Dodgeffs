@@ -11,7 +11,7 @@ class Player extends Entity {
     this.moving = false;
     this.velocity = 340;
     this.maxHP = 500;
-    this.currentHP = 400;
+    this.currentHP = 500;
     this.ccd = false;
   }
   getX() {
@@ -25,6 +25,12 @@ class Player extends Entity {
   }
   setY(newY) {
     this.y = newY;
+  }
+  getRadius() {
+    return this.radius;
+  }
+  setRadius(newRadius) {
+    this.radius = newRadius;
   }
   getDestinationX() {
     return this.destinationX;
@@ -132,6 +138,25 @@ class Player extends Entity {
       //move this
       this.move();
     }
+    //Check for collisions
+    for (var i = 0; i < entityList.length; ++i) {
+      if (entityList[i] != this) {
+        if (
+          entityList[i].doesCircleCollideWithThis(
+            this.getX(),
+            this.getY(),
+            this.getRadius()
+          )
+        ) {
+          this.setCurrentHP(this.getCurrentHP()-5);
+        }
+      }
+    }
+    //If player hp is 0, game over!
+    if(player.getCurrentHP() <= 0){
+      running = false;
+    }
+
   }
   render() {
     //Draw player
@@ -158,41 +183,49 @@ class Player extends Entity {
     ctx.closePath();
 
     //Draw max health (constant)
-    
+
     ctx.beginPath();
     ctx.fillStyle = "#666666";
-    ctx.rect((width / 2) - 100, height - 50, 200, 30);
+    ctx.rect(width / 2 - 100, height - 50, 200, 30);
     ctx.fill();
     //Health border
     //ctx.strokeStyle = "#f3f3f3";
     //ctx.lineWidth = 5;
     //ctx.stroke();
     ctx.closePath();
-    
 
     //Draw current health (variable)
     ctx.beginPath();
     //As variable!
     //First draw the color of the hp when it is low
     ctx.fillStyle = "#e06666";
-    ctx.rect((width / 2) - 100, height - 50, (this.getCurrentHP()/this.getMaxHP())*200, 30);
+    ctx.rect(
+      width / 2 - 100,
+      height - 50,
+      (this.getCurrentHP() / this.getMaxHP()) * 200,
+      30
+    );
     ctx.fill();
     ctx.closePath();
 
-   
     ctx.beginPath();
     //Then blend it with an hp color of increasing opacity??
     ctx.fillStyle = "#93c47d";
-    ctx.globalAlpha = (this.getCurrentHP()/this.getMaxHP());
-    ctx.rect((width / 2) - 100, height - 50, (this.getCurrentHP()/this.getMaxHP())*200, 30);
+    ctx.globalAlpha = this.getCurrentHP() / this.getMaxHP();
+    ctx.rect(
+      width / 2 - 100,
+      height - 50,
+      (this.getCurrentHP() / this.getMaxHP()) * 200,
+      30
+    );
     ctx.fill();
     ctx.globalAlpha = 1;
     ctx.closePath();
-    
+
     //Gotta do something for full hp WIP
-    if(this.getCurrentHP() == this.getMaxHP()){
+    if (this.getCurrentHP() == this.getMaxHP()) {
       ctx.beginPath();
-      ctx.fillStyle = "#93c47d"
+      ctx.fillStyle = "#93c47d";
     }
   }
 }

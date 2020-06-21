@@ -109,12 +109,15 @@ class Enemy extends Entity {
   setRadius(newRadius) {
     this.radius = newRadius;
   }
+  doesCircleCollideWithThis(incomingX, incomingY, incomingRadius){
+    if(this.distanceCartesian(incomingX, incomingY, this.getX(), this.getY()) < incomingRadius + this.getRadius()){
+      return true;
+    }
+  }
+  distanceCartesian(x1, y1, x2, y2){
+    return Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2));
+  }
   move() {
-    /*
-    console.log(this.getX(), ",", this.getY());
-    console.log(this.getDirection(), ",", this.getOpposingAngle(this.getDirection()));
-    console.log(this.getSpawnDistance());
-    */
     //If velocity is 20%, we move across 20% of the screen in 1 second.
     //.2/60 = the amount we move in one frame.
     var r = this.getVelocity() / 60;
