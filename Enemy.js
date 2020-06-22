@@ -10,7 +10,7 @@ class Enemy extends Entity {
     this.y = this.spawnY();
     this.bounds = false;
     this.moving = true;
-    this.velocity = 340;
+    this.velocity = 1.5*340;
     this.ccd = false;
   }
   getX() {
@@ -64,14 +64,14 @@ class Enemy extends Entity {
   }
   spawnX() {
     return (
-      width / 2 +
+      player.getX() +
       this.getSpawnDistance() *
         Math.cos(this.getOpposingAngle(this.getDirection()))
     );
   }
   spawnY() {
     return (
-      height / 2 +
+      player.getY() +
       this.getSpawnDistance() *
         Math.sin(this.getOpposingAngle(this.getDirection()))
     );

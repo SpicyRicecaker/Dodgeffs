@@ -21,7 +21,9 @@ function init() {
   player = new Player(playerId);
   entityList.push(player);
   //Pushes new enemy onto array
-  entityList.push(new Enemy(enemyId));
+  for(var i = 0; i < 2; ++i){
+    entityList.push(new Enemy(enemyId));
+  }
 }
 
 function resizeCanvas(){
@@ -91,7 +93,7 @@ function tick() {
   for(var i = 0; i < entityList.length; ++i){
     entityList[i].tick();
   }
-  if(secondsToSpawn > 10){
+  if(secondsToSpawn > 5){
     entityList.push(new Enemy(enemyId));
     secondsToSpawn = 0;
   }
